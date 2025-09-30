@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { oa } from '../openai.js';
-import type { Pool } from 'pg';
+import { oa } from '../openai.ts';
+import { Pool } from 'pg';
 
 const CourseSchema = z.object({
   topic: z.string(),
@@ -11,6 +11,7 @@ const CourseSchema = z.object({
     cards: z.array(z.object({ front: z.string(), back: z.string() }))
   }))
 });
+type CourseOut = z.infer<typeof CourseSchema>;
 
 export async function generateCourse(db: Pool, userId: string, topic: string, language = 'pt-BR') {
   const jsonSchema = {
@@ -57,16 +58,26 @@ export async function generateCourse(db: Pool, userId: string, topic: string, la
   });
 
   const raw = resp.output_text ?? JSON.stringify(resp.output_parsed);
-  const data = CourseSchema.parse(JSON.parse(raw));
+  const data = CourseSchema.parse(JSON.parse(raw)) as CourseOut;
 
-  const c = await db.query('insert into course(user_id,topic,language) values ($1,$2,$3) returning id', [userId, data.topic, data.language]);
+  const c = await db.query(
+    'insert into course(user_id,topic,language) values ($1,$2,$3) returning id',
+    [userId, data.topic, data.language]
+  );
   const courseId = c.rows[0].id;
 
-  for (const [i,l] of data.lessons.entries()) {
-    const L = await db.query('insert into lesson(course_id,title,content_md,order_index) values ($1,$2,$3,$4) returning id', [courseId, l.title, l.content_md, i]);
+  for (const [i, l] of data.lessons.entries()) {
+    const L = await db.query(
+      'insert into lesson(course_id,title,content_md,order_index) values ($1,$2,$3,$4) returning id',
+      [courseId, l.title, l.content_md, i]
+    );
     for (const card of l.cards) {
-      await db.query('insert into card(course_id,lesson_id,front,back) values ($1,$2,$3,$4)', [courseId, L.rows[0].id, card.front, card.back]);
+      await db.query(
+        'insert into card(course_id,lesson_id,front,back) values ($1,$2,$3,$4)',
+        [courseId, L.rows[0].id, card.front, card.back]
+      );
     }
   }
+
   return { courseId };
 }
