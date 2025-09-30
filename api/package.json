@@ -1,0 +1,20 @@
+{
+  "name": "studysprint-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "dev": "ts-node src/server.ts" },
+  "dependencies": {
+    "cors": "^2",
+    "dotenv": "^16",
+    "fastify": "^4",
+    "openai": "^4",
+    "pg": "^8",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2",
+    "@types/node": "^20",
+    "ts-node": "^10",
+    "typescript": "^5"
+  }
+}

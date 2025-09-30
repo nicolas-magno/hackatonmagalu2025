@@ -1,0 +1,7 @@
+[
+  {
+    "AllowedHeaders": ["*"],
+    "AllowedMethods": ["GET","HEAD"],
+    "AllowedOrigins": ["*"]
+  }
+]
