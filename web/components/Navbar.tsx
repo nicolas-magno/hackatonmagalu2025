@@ -11,7 +11,7 @@ export default function Navbar(){
 
   return (
     <header className="mb-6 flex items-center justify-between">
-      <Link href="/" className="text-lg font-semibold">foco-duo</Link>
+      <Link href="/" className="text-lg font-semibold">FocusEdu</Link>
       {mounted && (
         <button
           className="rounded-md border px-3 py-1"

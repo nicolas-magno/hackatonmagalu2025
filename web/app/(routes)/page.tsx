@@ -20,7 +20,7 @@ export default function Page(){
 
   return (
     <main className="space-y-6">
-      <h1 className="text-2xl font-bold">foco-duo</h1>
+      <h1 className="text-2xl font-bold">FocusEdu</h1>
       <p>Digite um assunto e gere um mini-curso com lições e cards.</p>
       <div className="flex gap-2">
         <input className="w-full rounded-md border px-3 py-2"
