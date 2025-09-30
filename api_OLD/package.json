@@ -1,0 +1,19 @@
+{
+  "name": "studyduo-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "dev": "node --loader ts-node/esm src/server.ts" },
+  "dependencies": {
+    "fastify": "^4",
+    "@fastify/cors": "^10",
+    "dotenv": "^16",
+    "openai": "^4",
+    "pg": "^8",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "ts-node": "^10",
+    "@types/node": "^20"
+  }
+}

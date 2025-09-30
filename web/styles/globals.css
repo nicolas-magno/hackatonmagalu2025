@@ -1,3 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ========== Tema por CSS variables (light/dark) ========== */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71% 4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 215 20% 65%;
+
+    /* brand azul ~ “magalu-ish” */
+    --primary: 223 76% 55%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 224 71% 6%;
+    --card-foreground: 210 40% 98%;
+
+    --muted: 223 44% 14%;
+    --muted-foreground: 215 20% 65%;
+
+    --border: 223 47% 11%;
+    --input: 223 47% 11%;
+    --ring: 216 34% 17%;
+
+    --primary: 223 76% 55%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 223 47% 16%;
+    --secondary-foreground: 210 40% 98%;
+  }
+
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+/* ========== Fundos decorativos ========== */
+.bg-grid {
+  background-image:
+    radial-gradient(hsla(0,0%,100%,0.06) 1px, transparent 1px),
+    radial-gradient(hsla(0,0%,0%,0.05) 1px, transparent 1px);
+  background-position: 0 0, 12px 12px;
+  background-size: 24px 24px;
+}
+.dark .bg-grid {
+  background-image:
+    radial-gradient(hsla(0,0%,100%,0.06) 1px, transparent 1px),
+    radial-gradient(hsla(0,0%,100%,0.03) 1px, transparent 1px);
+}
+
+.hero-gradient {
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,0.15), transparent),
+              radial-gradient(1000px 500px at 100% 0%, rgba(99,102,241,0.15), transparent);
+}

@@ -32,13 +32,15 @@ export default function LessonPage({ params }: { params: { id: string } }){
         <PomodoroTimer />
       </div>
       {current ? (
-        <div>
-          <CardRenderer card={current} />
-          <AnswerControls onRate={(r)=> answer.mutate({ cardId: current.id, rating: r })} />
-        </div>
-      ) : (
-        <p>Sem mais cartões. Parabéns! 🎉</p>
-      )}
+  <div className="rounded-2xl border bg-card p-5 shadow-soft">
+    <CardRenderer card={current} />
+    <div className="mt-3">
+      <AnswerControls onRate={(r)=> answer.mutate({ cardId: current.id, rating: r })} />
+    </div>
+  </div>
+) : (
+  <p>Sem mais cartões. Parabéns! 🎉</p>
+)}
     </main>
   );
 }
