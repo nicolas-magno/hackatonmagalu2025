@@ -1,30 +1,17 @@
 import 'dotenv/config';
 import fastify from 'fastify';
 import cors from '@fastify/cors';
-
-// se seus arquivos são .ts, importe SEM extensão:
-import { db } from './db';
 import { routes } from './routes';
+import { db } from './db';
 
-async function bootstrap() {
-  const app = fastify({ logger: true });
+const app = fastify({ logger: true });
 
-  // CORS para o front local; ajuste origin se quiser restringir
-  await app.register(cors, { origin: true });
+await app.register(cors, {
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Vite dev
+});
 
-  app.get('/health', async () => ({ ok: true }));
+app.get('/health', async () => ({ ok: true }));
+routes(app, db);
 
-  // se 'routes' recebe (app, db), mantenha assim:
-  routes(app, db);
-
-  const port = Number(process.env.PORT ?? 3000);
-  try {
-    await app.listen({ port, host: '0.0.0.0' });
-    app.log.info(`✅ API on: http://localhost:${port}`);
-  } catch (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-}
-
-bootstrap();
+const port = Number(process.env.PORT || 3000);
+await app.listen({ port, host: '0.0.0.0' });

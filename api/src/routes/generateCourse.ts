@@ -1,91 +1,58 @@
-import { z } from "zod";
-import  oa  from "../openai";       // <— sem .js
+// api/src/routes/generateCourse.ts
 import type { Pool } from "pg";
 
-const CourseSchema = z.object({
-  topic: z.string(),
-  language: z.string(),
-  lessons: z.array(z.object({
-    title: z.string(),
-    content_md: z.string(),
-    cards: z.array(z.object({ front: z.string(), back: z.string() }))
-  }))
-});
-
-export async function generateCourse(db: Pool, userId: string, topic: string, language = "pt-BR") {
-  // schema só para validação local com Zod
-  const jsonSchema = {
-    name: "Course",
-    schema: {
-      type: "object",
-      properties: {
-        topic: { type: "string" },
-        language: { type: "string" },
-        lessons: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              title: { type: "string" },
-              content_md: { type: "string" },
-              cards: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: { front: { type: "string" }, back: { type: "string" } },
-                  required: ["front", "back"],
-                  additionalProperties: false
-                }
-              }
-            },
-            required: ["title", "content_md", "cards"],
-            additionalProperties: false
-          }
-        }
-      },
-      required: ["topic", "language", "lessons"],
-      additionalProperties: false
+export async function generateCourse(
+  db: Pool,
+  userId: string,
+  topic: string,
+  language = "pt-BR"
+) {
+  // 1) acha um seed_course pelo tópico pedido; se não achar, usa o primeiro disponível
+  const s = await db.query(
+    `select id from seed_course
+     where lower(topic) = lower($1) or $1 ilike topic
+     order by id limit 1`,
+    [topic]
+  );
+  let seedId: number;
+  if (s.rowCount) {
+    seedId = s.rows[0].id;
+  } else {
+    const s2 = await db.query("select id from seed_course order by id limit 1");
+    if (!s2.rowCount) {
+      throw new Error("Nenhum curso semente encontrado. Rode infra/seed.sql.");
     }
-  };
+    seedId = s2.rows[0].id;
+  }
 
-  const system = `Você é um gerador de trilhos de estudo estilo Duolingo.
-Produza 3–6 lições curtas (120–200 palavras, em markdown), cada uma com 4–6 flashcards (pergunta/resposta).
-Linguagem ${language}. Evite jargões; use exemplos claros e erros comuns. Responda somente JSON válido.`;
-
-  const user = `Tema: ${topic}. Nível: beginner.
-Não repita conteúdo entre lições.`;
-
-  // DeepSeek via Chat Completions (compatível com SDK OpenAI)
-  const completion = await oa.chat.completions.create({
-    model: "deepseek-chat",
-    messages: [
-      { role: "system", content: system },
-      { role: "user", content: user }
-    ],
-    // peça JSON bem-formado
-    response_format: { type: "json_object" },
-    temperature: 0.2
-  });
-
-  const raw = completion.choices?.[0]?.message?.content?.trim() ?? "{}";
-  const data = CourseSchema.parse(JSON.parse(raw));
-
-  // persiste no banco
+  // 2) cria o curso do usuário (mantendo o 'topic' que ele digitou)
   const c = await db.query(
     "insert into course(user_id, topic, language) values ($1,$2,$3) returning id",
-    [userId, data.topic, data.language]
+    [userId, topic, language]
   );
-  const courseId = c.rows[0].id;
+  const courseId: number = c.rows[0].id;
 
-  for (const [i, l] of data.lessons.entries()) {
+  // 3) clona lições e cards da seed_* para lesson/card
+  const seedLessons = await db.query(
+    "select id, title, content_md, order_index from seed_lesson where seed_course_id=$1 order by order_index",
+    [seedId]
+  );
+
+  for (const sl of seedLessons.rows) {
     const L = await db.query(
       "insert into lesson(course_id, title, content_md, order_index) values ($1,$2,$3,$4) returning id",
-      [courseId, l.title, l.content_md, i]
+      [courseId, sl.title, sl.content_md, sl.order_index]
     );
-    for (const card of l.cards) {
+    const lessonId: number = L.rows[0].id;
+
+    const seedCards = await db.query(
+      "select front, back from seed_card where seed_lesson_id=$1 order by id",
+      [sl.id]
+    );
+    for (const sc of seedCards.rows) {
       await db.query(
         "insert into card(course_id, lesson_id, front, back) values ($1,$2,$3,$4)",
-        [courseId, L.rows[0].id, card.front, card.back]
+        [courseId, lessonId, sc.front, sc.back]
       );
     }
   }
