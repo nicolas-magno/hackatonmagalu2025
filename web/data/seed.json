@@ -1,0 +1,65 @@
+{
+  "courses": [
+    {
+      "id": "c-ele-1",
+      "topic": "Eletrostática básica",
+      "lessons": [
+        { "id": "l-ele-1", "title": "Fundamentos de carga e campo" },
+        { "id": "l-ele-2", "title": "Lei de Gauss na prática" },
+        { "id": "l-ele-3", "title": "Potencial elétrico e energia" }
+      ]
+    },
+    {
+      "id": "c-red-1",
+      "topic": "Redes — Camada de Enlace",
+      "lessons": [
+        { "id": "l-red-1", "title": "Detecção e correção de erros" },
+        { "id": "l-red-2", "title": "Acesso ao meio (MAC)" },
+        { "id": "l-red-3", "title": "Switches e VLANs" }
+      ]
+    },
+    {
+      "id": "c-cib-1",
+      "topic": "Cibersegurança — Fundamentos",
+      "lessons": [
+        { "id": "l-cib-1", "title": "Tríade CIA" },
+        { "id": "l-cib-2", "title": "Ameaças comuns" },
+        { "id": "l-cib-3", "title": "Controles e mitigação" }
+      ]
+    }
+  ],
+  "cardsByLesson": {
+    "l-ele-1": [
+      { "id": "ele-f1", "type": "flashcard", "front": "O que é campo elétrico (E)?", "back": "Força por unidade de carga: E = F/q." },
+      { "id": "ele-m1", "type": "mcq", "question": "Unidade de E?", "options": ["N/C", "J", "C", "V/A"], "answer": 0 },
+      { "id": "ele-c1", "type": "cloze", "text": "A força elétrica é __ vezes a carga: F = __ · q.", "blanks": ["proporcional", "E"] }
+    ],
+    "l-ele-2": [
+      { "id": "ele2-f1", "type": "flashcard", "front": "Enunciado da Lei de Gauss", "back": "Fluxo de E através de uma superfície fechada = carga interna/ε0." }
+    ],
+    "l-ele-3": [
+      { "id": "ele3-f1", "type": "flashcard", "front": "Relação entre E e V", "back": "E = -∇V." }
+    ],
+
+    "l-red-1": [
+      { "id": "red1-f1", "type": "flashcard", "front": "CRC serve para…", "back": "Detectar erros em quadros." },
+      { "id": "red1-m1", "type": "mcq", "question": "Bit de paridade detecta todo erro?", "options": ["Sim", "Não"], "answer": 1 }
+    ],
+    "l-red-2": [
+      { "id": "red2-f1", "type": "flashcard", "front": "CSMA/CD", "back": "Acesso ao meio com detecção de colisão (Ethernet legado)." }
+    ],
+    "l-red-3": [
+      { "id": "red3-f1", "type": "flashcard", "front": "VLAN", "back": "Segmentação lógica em camada 2." }
+    ],
+
+    "l-cib-1": [
+      { "id": "cib1-f1", "type": "flashcard", "front": "CIA", "back": "Confidencialidade, Integridade, Disponibilidade." }
+    ],
+    "l-cib-2": [
+      { "id": "cib2-f1", "type": "flashcard", "front": "Phishing é…", "back": "Engenharia social para roubo de credenciais/dados." }
+    ],
+    "l-cib-3": [
+      { "id": "cib3-f1", "type": "flashcard", "front": "MFA", "back": "Múltiplos fatores para autenticar usuários." }
+    ]
+  }
+}

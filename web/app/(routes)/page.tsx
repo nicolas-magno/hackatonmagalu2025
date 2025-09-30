@@ -1,25 +1,28 @@
 "use client";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { Brain, Timer, BookOpen } from "lucide-react";
-import { toast } from "sonner";
+
+type LessonRef = { id: string; title: string };
+type Course = { id: string; topic: string; lessons: LessonRef[] };
+
+async function fetchCourses(){
+  const { data } = await api.get("/course"); // GET lista
+  return data as Course[];
+}
 
 export default function Page(){
   const [topic, setTopic] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { data: courses, isLoading } = useQuery({ queryKey: ["courses"], queryFn: fetchCourses });
 
   async function onCreate(){
     try{
       setLoading(true);
       const { data } = await api.post("/course", { topic });
       router.push(`/course/${data.id}`);
-    }catch(e: any){
-      toast.error(e?.message ?? "Erro ao criar curso");
     }finally{
       setLoading(false);
     }
@@ -27,40 +30,47 @@ export default function Page(){
 
   return (
     <main className="space-y-10">
-      {/* Hero */}
       <section className="text-center">
         <h1 className="mx-auto max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
           Estude <span className="text-primary">qualquer assunto</span>, com foco e revisão inteligente.
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          Gere um mini-curso instantâneo, pratique com cartões e mantenha o ritmo com Pomodoro + SRS.
+          Já deixamos alguns cursos prontos para a demo 😉
         </p>
         <div className="mx-auto mt-6 flex max-w-xl items-center gap-2">
-          <Input
+          <input
+            className="w-full rounded-xl border px-3 py-2"
             placeholder="Ex.: Eletrostática básica"
             value={topic}
             onChange={e=>setTopic(e.target.value)}
           />
-          <Button onClick={onCreate} disabled={!topic || loading}>
+          <button
+            className="rounded-xl border px-4 py-2"
+            disabled={!topic || loading}
+            onClick={onCreate}
+          >
             {loading ? "Gerando..." : "Criar curso"}
-          </Button>
+          </button>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardTitle className="flex items-center gap-2"><Brain className="h-5 w-5 text-primary" /> SRS</CardTitle>
-          <CardDescription className="mt-1">Revisão espaçada para memorizar de verdade.</CardDescription>
-        </Card>
-        <Card>
-          <CardTitle className="flex items-center gap-2"><Timer className="h-5 w-5 text-primary" /> Pomodoro</CardTitle>
-          <CardDescription className="mt-1">Ciclos 25/5 para foco consistente.</CardDescription>
-        </Card>
-        <Card>
-          <CardTitle className="flex items-center gap-2"><BookOpen className="h-5 w-5 text-primary" /> Mini-cursos</CardTitle>
-          <CardDescription className="mt-1">Aulas e cards gerados a partir do seu assunto.</CardDescription>
-        </Card>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">Cursos prontos</h2>
+        {isLoading && <p>Carregando…</p>}
+        {!isLoading && (!courses || courses.length === 0) && <p>Nenhum curso ainda.</p>}
+        {!!courses?.length && (
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {courses.map(c => (
+              <li key={c.id} className="rounded-2xl border bg-card p-4 shadow-soft">
+                <div className="mb-2 text-lg font-medium">{c.topic}</div>
+                <ul className="mb-3 text-sm text-muted-foreground list-disc pl-5">
+                  {c.lessons.slice(0,3).map(l => <li key={l.id}>{l.title}</li>)}
+                </ul>
+                <a className="inline-block rounded-xl border px-3 py-1 hover:bg-muted" href={`/course/${c.id}`}>Abrir</a>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </main>
   );
