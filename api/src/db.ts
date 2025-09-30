@@ -1,9 +1,10 @@
 import { Pool } from 'pg';
 
+const useSSL = process.env.DB_SSL === 'true';
 export const db = new Pool({
   connectionString: process.env.DATABASE_URL,
   // Para DBaaS com SSL obrigatório e sem CA local:
-  ssl: { rejectUnauthorized: false },
+  ssl: useSSL ? { rejectUnauthorized: false } : undefined,
 });
 
 // teste opcional no boot:

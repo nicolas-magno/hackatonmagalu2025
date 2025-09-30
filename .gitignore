@@ -1,12 +1,21 @@
+Thumbs.db
+.DS_Store
+
 # Node
 node_modules/
 dist/
 build/
+.out/
+.next/
+.vercel/
+.turbo/
 .cache/
 .tmp/
 # Env
 .env
 .env.*
+api/.env
+web/.env
 # Logs
 npm-debug.log*
 yarn-debug.log*
