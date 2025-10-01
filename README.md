@@ -300,15 +300,5 @@ server {
 
 ---
 
-## 📚 Licenças e atribuição
-- Código: defina a licença do projeto (ex.: MIT).  
-- Dados abertos (quando usados):  
-  - **Open Trivia DB** — CC BY-SA 4.0 (exige atribuição/share‑alike).  
-  - Outros datasets (ARC, QASC etc.): verificar licença; incluir créditos.  
-- Sugestão de rodapé:  
-  > “Algumas questões fornecidas por **Open Trivia DB (CC BY-SA 4.0)**.”
-
----
-
 **Equipe & propósito** — Educação prática, rápida e sem distrações.  
 **A missão** é ajudar pessoas como o Rafa a saírem da inércia e acumularem pequenas vitórias todos os dias.
