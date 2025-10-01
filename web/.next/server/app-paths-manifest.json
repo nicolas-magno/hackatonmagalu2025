@@ -1,9 +1,8 @@
 {
   "/(routes)/page": "app/(routes)/page.js",
-  "/(routes)/lesson/[id]/page": "app/(routes)/lesson/[id]/page.js",
-  "/api/lesson/[id]/cards/route": "app/api/lesson/[id]/cards/route.js",
-  "/api/course/route": "app/api/course/route.js",
   "/(routes)/course/[id]/page": "app/(routes)/course/[id]/page.js",
   "/api/course/[id]/route": "app/api/course/[id]/route.js",
-  "/api/srs/answer/route": "app/api/srs/answer/route.js"
+  "/(routes)/lesson/[id]/page": "app/(routes)/lesson/[id]/page.js",
+  "/api/lesson/[id]/cards/route": "app/api/lesson/[id]/cards/route.js",
+  "/api/course/route": "app/api/course/route.js"
 }
