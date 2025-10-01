@@ -1,4 +1,4 @@
-# foco-edu — mini-cursos sob demanda (Pomodoro + SRS) Cloud-First
+# FocusEdu — mini-cursos sob demanda (Pomodoro + SRS) Cloud-First
 > **Hackathon MVP** — “Duolingo para *qualquer assunto*”: digite um tema, gere um mini-curso e estude com foco (Pomodoro) + revisão espaçada (SRS).
 Este repositório traz frontend (Next.js) e backend (Fastify + PostgreSQL) e foi pensado para nuvem: deploy simples em VM com Docker/Compose, banco gerenciado (DBaaS) e proxy com HTTPS automático.
 A **Home** já aceita um tema (ex.: *Eletrostática básica*) e abre um **curso** com **lições**. No MVP atual as lições são **placeholders**; abaixo explicamos **a inspiração/tema**, **o que já fizemos** e **o que queríamos fazer** (geração automática de cursos/questões, fallback com dados abertos, Pomodoro e SRS integrados).
