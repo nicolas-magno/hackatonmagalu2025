@@ -1,4 +1,4 @@
-# foco-duo — mini-cursos sob demanda (Pomodoro + SRS)
+# foco-edu — mini-cursos sob demanda (Pomodoro + SRS)
 > **Hackathon MVP** — “Duolingo para *qualquer assunto*”: digite um tema, gere um mini-curso e estude com foco (Pomodoro) + revisão espaçada (SRS).
 
 Este repositório contém **frontend (Next.js)** e **backend (Fastify + PostgreSQL)** de um protótipo funcional.  
